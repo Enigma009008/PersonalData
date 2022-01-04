@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PersonalDataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Status">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="UserPersonal" Relationship="Self.FK_UserPersonal_Status" FromRole="Status" ToRole="UserPersonal" />
+  </EntityType>
+  <EntityType Name="UserPersonal">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="DateOfBirth" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Phone" Type="String" MaxLength="15" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="Photo" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="IDStatus" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Status" Relationship="Self.FK_UserPersonal_Status" FromRole="UserPersonal" ToRole="Status" />
+  </EntityType>
+  <Association Name="FK_UserPersonal_Status">
+    <End Role="Status" Type="Self.Status" Multiplicity="1" />
+    <End Role="UserPersonal" Type="Self.UserPersonal" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Status">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="UserPersonal">
+        <PropertyRef Name="IDStatus" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PersonalDataEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Status" EntityType="Self.Status" />
+    <EntitySet Name="UserPersonal" EntityType="Self.UserPersonal" />
+    <AssociationSet Name="FK_UserPersonal_Status" Association="Self.FK_UserPersonal_Status">
+      <End Role="Status" EntitySet="Status" />
+      <End Role="UserPersonal" EntitySet="UserPersonal" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
